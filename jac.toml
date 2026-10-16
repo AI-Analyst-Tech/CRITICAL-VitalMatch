@@ -1,0 +1,50 @@
+[project]
+
+name = "critical"
+
+version = "0.1.0"
+
+description = "CRITICAL - Intelligent Blood Donor Mobilization"
+default-app = "critical"
+
+[byllm]
+
+[byllm.model]
+
+default_model = "local:gemma-4-e2b"
+
+[serve]
+
+base_route_app = "app"
+
+[dependencies]
+
+"byllm[local]" = ">=0.0.0"
+
+[dependencies.npm]
+
+react = "^18.2.0"
+react-dom = "^18.2.0"
+react-router-dom = "^6.22.0"
+react-error-boundary = "^5.0.0"
+sonner = "latest"
+
+[dependencies.npm.dev]
+
+vite = "^6.4.1"
+"@vitejs/plugin-react" = "^4.2.0"
+typescript = "^5.3.3"
+"@types/react" = "^18.2.0"
+"@types/react-dom" = "^18.2.0"
+
+[apps.critical]
+kind = "cli"
+entry-point = "main"
+
+[apps.request_actions]
+kind = "service"
+entry-point = "backend.request_actions"
+
+[apps.actions]
+kind = "service"
+entry-point = "backend.actions"

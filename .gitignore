@@ -1,0 +1,61 @@
+# Jac local state and generated files
+.jac/
+.freebuff/
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*secret*
+*credential*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# JavaScript and build output
+node_modules/
+dist/
+build/
+.vite/
+
+# Local databases and logs
+*.sqlite
+*.sqlite3
+*.db
+*.log
+
+# Local backups
+backups/
+*.bak
+*.before-*
+*.pre-theme-backup
+*.orig
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local debugging artifacts: keep out of Git
+/][?:BloodRequest]
+/][?:Donor]
+/][?:Hospital]
+/][?:Match]
+/][?:PrivateDonorProfile]
+/dict[str,
+/update_critical_donor_profiles.py
+
+# Root-level artifacts created during earlier debugging
+/*]
+/dict?str,
+
+# Empty compiler/debug artifacts
+pages/index.jac:*
