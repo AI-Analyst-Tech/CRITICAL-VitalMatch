@@ -5,13 +5,12 @@ import from ..components.foundation {
     CriticalPageBackground
 }
 
-import from backend.request_actions {
+sv import from ..backend.request_actions {
     RegisterDonor,
     save_my_donor_profile
 }
 
 import from "@jac/runtime" {
-    SignupResult,
     jacLogin,
     jacSignup
 }
@@ -78,13 +77,18 @@ def:pub Page() -> JsxPage {
         submitting = True;
         status_message = "Creating your login account...";
 
-        signup_result: SignupResult | None = None;
+        signup_result: dict | None = None;
+        signup_ok: bool = False;
+        signup_error: str = "";
+        signup_user_id: str = "";
         login_ok: bool = False;
 
         signup_result = await jacSignup(email.strip(), password);
+        signup_ok = signup_result["success"] as bool;
 
-        if not signup_result.success {
-            status_message = "Account creation failed: " + signup_result.error;
+        if not signup_ok {
+            signup_error = signup_result["error"] as str;
+            status_message = "Account creation failed: " + signup_error;
             submitting = False;
             return;
         }
@@ -103,7 +107,7 @@ def:pub Page() -> JsxPage {
 
         result = root spawn RegisterDonor(
             donor_id="DON-" + phone,
-            account_user_id=signup_result.user_id,
+            account_user_id=signup_result["user_id"] as str,
             email=email.strip(),
             full_name=full_name.strip(),
             blood_group=blood_group,
