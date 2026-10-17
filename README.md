@@ -1,103 +1,147 @@
-# CRITICAL | PulseBridge
+# CRITICAL | VitalMatch
 
-**When every second counts, connect lives.**
+**Because Every Life Matters.**
 
-CRITICAL is a generative AI hackathon project exploring intelligent, consent-aware blood donor mobilization in Kenya. Its vision is to connect hospitals, authorized healthcare teams, registered donors, and patients who urgently need blood through blood-group compatibility, location-aware matching, urgency prioritization, and explainable AI-assisted recommendations.
+CRITICAL | VitalMatch is a generative AI hackathon project exploring how technology can help coordinate blood donor mobilization in Kenya. The goal is to help authorized hospital teams identify potentially suitable registered donors using blood-group filtering, county-and-area matching, urgency-aware prioritization, and AI-assisted explanations.
 
-> **Status:** Active prototype under development. CRITICAL is not a certified medical system, emergency dispatch service, or replacement for qualified clinical decisions and established blood services.
+> **Project status:** Active prototype under development. This application is not a certified medical system, emergency dispatch service, or replacement for qualified clinical decisions or established blood services.
 
 ## The challenge
 
-When blood is urgently needed, identifying and coordinating potentially suitable donors can be difficult. CRITICAL explores how structured donor information and AI-assisted coordination could help authorized teams identify potential candidates more efficiently.
+When blood is urgently needed, identifying and coordinating potentially suitable donors can be difficult. CRITICAL | VitalMatch explores how structured donor information and responsible AI assistance can help authorized teams organize potential donor candidates more efficiently.
 
 ## Our vision
 
-### Donor experience
-- Donor registration and profile management.
-- Blood group, county and area, last donation date, availability, and consent preferences.
-- Potentially consent-aware notifications and donor response tracking as the relevant services are implemented.
+### For donors
+- Register and maintain a donor profile.
+- Provide blood group, county, area, last donation date, and availability information.
+- Specify location-consent preferences.
+- Explore future consent-aware notifications and donor response tracking as supporting services are implemented.
 
-### Hospital and coordinator experience
-- Hospital registration and verification workflows.
-- Emergency blood requests with blood group, urgency, units required, patient reference, and location.
-- Potential donor identification, understandable match reasons, and follow-up coordination.
+### For hospitals and coordinators
+- Support hospital registration and verification workflows.
+- Submit blood requests with a blood group, urgency level, required units, patient reference, and location.
+- Identify potential donor candidates for human review.
+- Provide understandable explanations of suggested matches and support follow-up coordination.
 
-### AI-assisted mobilization
-- Blood-group and location-based candidate filtering.
-- Consideration of verification, eligibility, availability, and consent.
-- County-and-area matching first, with distance ranking when reliable coordinates are available.
-- Urgency-aware prioritization and explainable recommendations for human review.
+### AI-assisted donor mobilization
+- Filter potential donors by blood group and location.
+- Explore urgency-aware prioritization.
+- Generate AI-assisted explanations of potential matches where the configured service is available.
+- Use county-and-area matching as the primary location approach, with distance-based ranking when reliable coordinates are available.
+- Keep final donor suitability, eligibility, and clinical decisions with authorized healthcare professionals.
 
-These are product goals, not claims that every feature is complete.
+These capabilities are being developed and tested. Their presence in the codebase does not mean every workflow or external integration is operational.
 
 ## Current prototype
 
-The codebase contains a multi-page Jac application, donor and hospital-related workflows, blood-request handling, donor-search logic, graph data models, shared UI components, and safety and informational pages.
+The repository contains a multi-page Jac application, donor registration and search workflows, blood-request handling, hospital-related functionality, graph data models, shared UI components, safety and informational pages, and AI-assisted match-explanation logic.
 
-The complete matching flow, hospital-directory integration, verification process, and end-to-end workflows still require testing. Live hospital alerts, confirmed donor notifications, automatic eligibility approval, and transport reimbursements must not be assumed operational.
+The AI explanation component is designed to provide supporting information rather than make clinical decisions. Its availability depends on configuration and successful service execution.
 
-## Technology
+The end-to-end donor matching flow, hospital-directory integration, verification processes, and complete workflows still require validation. Do not assume that live hospital alerts, confirmed donor notifications, automated medical eligibility approval, or transport reimbursements are operational.
 
-- **Jac** — application logic and backend workflows.
-- **Jac client / React ecosystem** — user interface.
-- **Graph models and walkers** — application data and actions.
-- **byLLM** — configuration for exploring AI-assisted capabilities.
+## Technology stack
 
-The development environment has used Jac `0.37.23`. The configured default model is `local:gemma-4-e2b`; availability depends on the local environment.
+- **Jac:** Application logic, backend actions, and graph-oriented data models.
+- **Jac client / React ecosystem:** Web user interface.
+- **Jac walkers and graph models:** Application workflows and data operations.
+- **Python:** Supporting AI-explanation functionality.
+- **Gemini integration:** AI-assisted explanations when the required service and credentials are configured.
+- **byLLM:** Configuration for exploring additional AI-assisted capabilities.
+
+The development environment has used Jac `0.37.23`. Model and provider availability depends on the local environment and configuration.
 
 ## Getting started
 
-Install the dependencies declared by the project configuration:
+### Prerequisites
+
+Install and configure Jac and the dependencies required by the project. Refer to the [official Jac installation guide](https://docs.jaseci.org/quick-guide/install/).
+
+### Install dependencies
 
 ```bash
 jac install
 ```
 
-Build the web client:
+### Validate the application
+
+Check the relevant Jac files before building. For example:
+
+```bash
+jac check backend/request_actions.jac
+jac check pages/find-donor.jac
+jac check pages/hospital.jac
+```
+
+### Build the web client
 
 ```bash
 jac build -a client -p web
 ```
 
-Run the development server:
+### Start the development server
 
 ```bash
 jac run --serve --dev
 ```
 
-Open the local address reported by the server. See the [official Jac installation guide](https://docs.jaseci.org/quick-guide/install/) for setup assistance.
+Open the local address reported by the server.
 
-## Safety and responsible AI
+**Development note:** The commands above are intended for local development. Production deployment requires separate configuration, testing, and security review.
 
-- A suggested match is not clinical approval.
-- Registration does not automatically establish donor verification, eligibility, availability, or willingness to respond.
-- Donor location must be used with appropriate consent.
-- Hospitals must not be treated as verified without an explicit verification process.
-- Notifications must not be reported as delivered without confirmation from a real service.
-- Transport support must not be described as approved or paid without an authorized process.
-- Never publish donor or patient personal information, credentials, tokens, or local secrets.
+## Configuration and secrets
+
+Some AI-assisted functionality may require a Gemini API key supplied through the `GEMINI_API_KEY` environment variable.
+
+- Keep API keys and credentials out of source control.
+- Do not paste secrets into issues, demonstrations, screenshots, or public documentation.
+- Configure required environment variables locally or through an appropriate deployment secret manager.
+- If the AI service is unavailable or unconfigured, do not represent AI-generated explanations as successfully delivered.
+
+## Safety, privacy, and responsible AI
+
+CRITICAL | VitalMatch is intended to support coordination, not replace medical judgment.
+
+- A suggested donor match is not clinical approval or confirmation that blood is available.
+- Blood-group filtering alone does not establish transfusion compatibility or donor eligibility.
+- Qualified healthcare professionals must verify suitability and make final clinical decisions.
+- Registration alone does not prove that a donor is verified, eligible, available, or willing to respond.
+- Donor location information must be handled with appropriate consent and privacy safeguards.
+- Hospitals must not be described as verified unless an explicit verification process confirms their status.
+- Notifications must not be described as delivered without confirmation from an actual notification service.
+- Transport support must not be described as approved or paid without an authorized, implemented process.
+- Protect patient references, donor contact details, health-related information, credentials, and other sensitive data.
+- Test with synthetic or appropriately de-identified data wherever possible.
 
 ## Roadmap
 
-- [ ] Stabilize hospital verification and directory retrieval.
+- [ ] Stabilize and test hospital verification and directory retrieval.
 - [ ] Validate blood-group and county/area matching end to end.
-- [ ] Improve match prioritization and decision explanations.
-- [ ] Validate donor eligibility, availability, and consent handling.
-- [ ] Develop notifications and donor response tracking.
+- [ ] Test AI-assisted explanations and failure handling.
+- [ ] Validate prioritization, eligibility safeguards, availability, and consent handling.
+- [ ] Develop reliable notifications and donor response tracking.
 - [ ] Explore an explicitly approved transport-support workflow.
-- [ ] Strengthen testing, privacy controls, and security review.
-- [ ] Validate deployment and AI-assisted behavior.
+- [ ] Strengthen privacy controls, access management, and security testing.
+- [ ] Test error handling, deployment configuration, and application performance.
+- [ ] Validate the complete demonstration flow before presenting the prototype.
 
 ## Contributing
 
-Make focused changes, test affected workflows, and review staged files before committing. Do not include confidential personal information or secrets in commits or issues.
+Contributions should be focused, testable, and consistent with the project's safety and privacy goals.
+
+1. Inspect the existing implementation before making changes.
+2. Make targeted changes that preserve working functionality.
+3. Run relevant checks and test affected workflows.
+4. Review staged changes before committing.
+5. Never commit credentials, tokens, private donor information, or patient-identifying data.
 
 ## License
 
-A license has not yet been selected. Until one is added, do not assume the code is available for unrestricted reuse.
+A license has not yet been selected. Until a license is added, do not assume the repository is available for unrestricted reuse.
 
 ---
 
 **Built for the CRITICAL Gen AI Hackathon.**
 
-*CRITICAL — PulseBridge: When every second counts, connect lives.*
+*CRITICAL | VitalMatch — Because Every Life Matters.*
