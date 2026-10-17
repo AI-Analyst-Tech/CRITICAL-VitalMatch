@@ -40,3 +40,7 @@ typescript = "^5.3.3"
 [apps.critical]
 kind = "web-app"
 entry-point = "main"
+
+[jacpack]
+name = 'prj_39d4b91fabc64c459aff1a7a62d134eb'
+description = 'Jac IDE snapshot for prj_39d4b91fabc64c459aff1a7a62d134eb'
