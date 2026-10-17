@@ -1,6 +1,6 @@
 """CRITICAL - Hospital Command Center."""
 
-import from components.foundation {
+import from ..components.foundation {
     CriticalHeader,
     CriticalPageBackground
 }

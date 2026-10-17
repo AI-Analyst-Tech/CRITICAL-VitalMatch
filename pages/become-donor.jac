@@ -1,6 +1,6 @@
 """CRITICAL - Become a Donor."""
 
-import from components.foundation {
+import from ..components.foundation {
     CriticalHeader,
     CriticalPageBackground
 }

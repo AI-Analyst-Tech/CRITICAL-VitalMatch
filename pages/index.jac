@@ -1,6 +1,6 @@
 """CRITICAL - premium flagship public homepage."""
 
-import from components.foundation {
+import from ..components.foundation {
     CriticalHeader,
     CriticalPageBackground
 }

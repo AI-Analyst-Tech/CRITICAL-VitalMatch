@@ -1,6 +1,6 @@
 """CRITICAL - Find a Donor."""
 
-import from components.foundation { CriticalHeader, CriticalPageBackground }
+import from ..components.foundation { CriticalHeader, CriticalPageBackground }
 
 import from backend.request_actions { CriticalSearchCompatibleDonors, ExplainDonorMatches }
 

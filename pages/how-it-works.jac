@@ -1,6 +1,6 @@
 """CRITICAL - How It Works."""
 
-import from components.foundation {
+import from ..components.foundation {
     CriticalHeader,
     CriticalPageBackground
 }
