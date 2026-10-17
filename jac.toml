@@ -38,13 +38,5 @@ typescript = "^5.3.3"
 "@types/react-dom" = "^18.2.0"
 
 [apps.critical]
-kind = "cli"
+kind = "web-app"
 entry-point = "main"
-
-[apps.request_actions]
-kind = "service"
-entry-point = "backend.request_actions"
-
-[apps.actions]
-kind = "service"
-entry-point = "backend.actions"
