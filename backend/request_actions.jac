@@ -7,6 +7,8 @@ import from backend.models {
     Hospital
 }
 
+import from backend.gemini_explainer { explain_donor_matches }
+
 import from backend.workflows {
     blood_group_compatible
 }
@@ -72,6 +74,7 @@ walker:pub CreateBloodRequest {
 walker:pub CriticalSearchCompatibleDonors {
     has blood_group: str;
     has location: str = "";
+    has demo_mode: bool = False;
 
     can search with Root entry {
         results = [];
@@ -130,14 +133,46 @@ walker:pub CriticalSearchCompatibleDonors {
             }
         }
 
+        demo_results = [];
+
+        if self.demo_mode {
+            demo_candidates = [
+                {"donor_id": "DEMO-001", "name": "Wanjiku Kamau", "blood_group": "O-"},
+                {"donor_id": "DEMO-002", "name": "Achieng Otieno", "blood_group": "O+"},
+                {"donor_id": "DEMO-003", "name": "Kiptoo Cheruiyot", "blood_group": "A-"},
+                {"donor_id": "DEMO-004", "name": "Naliaka Wekesa", "blood_group": "B+"},
+                {"donor_id": "DEMO-005", "name": "Mutua Mwende", "blood_group": "A+"},
+                {"donor_id": "DEMO-006", "name": "Moraa Nyanchama", "blood_group": "AB-"},
+                {"donor_id": "DEMO-007", "name": "Abdi Hassan", "blood_group": "AB+"}
+            ];
+
+            for candidate in demo_candidates {
+                if blood_group_compatible(
+                    candidate["blood_group"],
+                    self.blood_group
+                ) {
+                    demo_results.append({
+                        "donor_id": candidate["donor_id"],
+                        "name": candidate["name"],
+                        "blood_group": candidate["blood_group"],
+                        "verified": False,
+                        "available": False,
+                        "is_demo": True
+                    });
+                }
+            }
+        }
+
         report {
             "status": "success",
             "match_count": len(results),
             "matches": results,
+            "demo_match_count": len(demo_results),
+            "demo_matches": demo_results,
             "message": (
                 "Eligible donor matches found."
                 if len(results) > 0
-                else "No eligible donors found for this blood group and location."
+                else "No eligible real donors found for this blood group and location."
             )
         };
     }
@@ -354,5 +389,21 @@ walker:pub ListRegisteredHospitals {
             "hospital_count": len(hospital_records),
             "hospitals": hospital_records
         };
+    }
+}
+
+"""Explain aggregate donor search results using Gemini, without donor PII."""
+walker:pub ExplainDonorMatches {
+    has blood_group: str;
+    has county: str;
+    has match_count: int;
+
+    can explain with Root entry {
+        explanation_result = explain_donor_matches(
+            blood_group=self.blood_group,
+            county=self.county,
+            match_count=self.match_count
+        );
+        report explanation_result;
     }
 }

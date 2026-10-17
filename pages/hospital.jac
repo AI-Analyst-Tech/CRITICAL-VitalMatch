@@ -6,6 +6,26 @@ import from components.foundation {
 }
 
 def:pub Page() -> JsxPage {
+    has transport_amount: str = "";
+    has transport_reason: str = "";
+    has transport_status: str = "";
+
+    def review_transport_proposal() -> None {
+        if transport_amount.strip() == "" {
+            transport_status = "Enter a proposed amount in KES.";
+            return;
+        }
+        if not transport_amount.isdigit() or int(transport_amount) <= 0 {
+            transport_status = "Enter a valid whole-number amount greater than zero.";
+            return;
+        }
+        if transport_reason.strip() == "" {
+            transport_status = "Explain why transport support is being requested.";
+            return;
+        }
+        transport_status = "Draft validated for review only. It has NOT been submitted or saved. No transport funding is approved or guaranteed.";
+    }
+
     return <CriticalPageBackground>
         <CriticalHeader />
 

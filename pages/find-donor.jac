@@ -2,7 +2,7 @@
 
 import from components.foundation { CriticalHeader, CriticalPageBackground }
 
-import from backend.request_actions { CriticalSearchCompatibleDonors as FindDonorSearch }
+import from backend.request_actions { CriticalSearchCompatibleDonors, ExplainDonorMatches }
 
 
 def:pub Page() -> JsxPage {
@@ -10,27 +10,45 @@ def:pub Page() -> JsxPage {
     has county: str = "";
     has area: str = "";
     has match_count: int = 0;
+    has live_matches: list[dict[str, str | bool]] = [];
+    has demo_mode: bool = False;
+    has demo_match_count: int = 0;
+    has demo_matches: list[dict[str, str | bool]] = [];
     has status_message: str = "Choose a blood group, county and area to search.";
+    has ai_explanation: str = "";
+    has ai_status: str = "";
 
     async def search_donors() -> None {
         if blood_group == "" or county == "" or area == "" {
             status_message = "Please select a blood group and enter a county and area.";
             match_count = 0;
+            live_matches = [];
+            demo_match_count = 0;
+            demo_matches = [];
             return;
         }
 
         match_count = 0;
-        status_message = "Searching verified and available donors in this county...";
+        live_matches = [];
+        demo_match_count = 0;
+        demo_matches = [];
+        ai_explanation = "";
+        ai_status = "";
+        status_message = "Searching eligible registered donors...";
 
-        result = root spawn FindDonorSearch(
+        result = root spawn CriticalSearchCompatibleDonors(
             blood_group=blood_group,
-            location=county + " | " + area
+            location=county + " | " + area,
+            demo_mode=demo_mode
         );
 
         if result.reports {
             response = result.reports[0];
             if response["status"] == "success" {
                 match_count = int(response["match_count"]);
+                live_matches = response["matches"] as list[dict[str, str | bool]];
+                demo_match_count = int(response["demo_match_count"]);
+                demo_matches = response["demo_matches"] as list[dict[str, str | bool]];
                 status_message = response["message"];
             } else {
                 status_message = response["message"];
@@ -40,11 +58,39 @@ def:pub Page() -> JsxPage {
         }
     }
 
+    async def explain_results() -> None {
+        if blood_group == "" or county.strip() == "" {
+            ai_status = "Search for donors first, then request an explanation.";
+            ai_explanation = "";
+            return;
+        }
+        ai_status = "Generating a plain-language explanation...";
+        ai_explanation = "";
+        result = root spawn ExplainDonorMatches(
+            blood_group=blood_group,
+            county=county,
+            match_count=match_count
+        );
+        if result.reports {
+            response = result.reports[0];
+            ai_explanation = response["explanation"];
+            ai_status = "AI explanation ready. Please follow the clinical safety guidance below.";
+        } else {
+            ai_status = "The AI explanation service did not return a response. Please try again.";
+        }
+    }
+
     def reset_search() -> None {
         blood_group = "";
         county = "";
         area = "";
         match_count = 0;
+        live_matches = [];
+        demo_mode = False;
+        demo_match_count = 0;
+        demo_matches = [];
+        ai_explanation = "";
+        ai_status = "";
         status_message = "Search cleared. Choose a blood group, county and area to begin.";
     }
 
@@ -219,6 +265,28 @@ def:pub Page() -> JsxPage {
                                 />
                             </div>
                         </div>
+                        <label style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "9px",
+                            marginTop: "14px",
+                            padding: "11px 12px",
+                            background: "#fff8ed",
+                            border: "1px solid #f4dfb9",
+                            borderRadius: "8px",
+                            color: "#77541b",
+                            fontSize: "11px",
+                            fontWeight: "800"
+                        }}>
+                            <input
+                                type="checkbox"
+                                checked={demo_mode}
+                                onChange={lambda (e: ChangeEvent) {
+                                    demo_mode = e.target.checked;
+                                }}
+                            />
+                            Enable simulated demo candidates (not real donors)
+                        </label>
                         <div
                             style={{
                                 display: "flex",
@@ -605,9 +673,74 @@ def:pub Page() -> JsxPage {
                             {status_message}
                         </div>
                     </div>
-                    <div
-                        style={{
-                            marginTop: "13px",
+                    {if len(live_matches) > 0 {
+                        <div style={{ marginTop: "18px" }}>
+                            <div style={{ color: "#176b45", fontSize: "11px", fontWeight: "900", letterSpacing: "0.6px", marginBottom: "10px" }}>
+                                ELIGIBLE LIVE DONOR RECORDS
+                            </div>
+                            {for (i, candidate) in enumerate(live_matches) {
+                                <div key={candidate["donor_id"]} style={{ padding: "14px", marginBottom: "10px", border: "1px solid #cfe8d9", borderRadius: "10px", background: "#f7fcf8" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                                        <div style={{ color: "#123d2a", fontSize: "14px", fontWeight: "900" }}>{candidate["name"]}</div>
+                                        <div style={{ padding: "5px 9px", borderRadius: "6px", background: "#176b45", color: "#ffffff", fontSize: "12px", fontWeight: "900" }}>{candidate["blood_group"]}</div>
+                                    </div>
+                                    <div style={{ marginTop: "7px", color: "#45627e", fontSize: "11px" }}>Area: {candidate["area"]} · County: {candidate["county"]}</div>
+                                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "10px" }}>
+                                        {if candidate["verified"] == True {
+                                            <span style={{ padding: "5px 8px", borderRadius: "5px", background: "#e0f4e8", color: "#176b45", fontSize: "10px", fontWeight: "800" }}>Verified record</span>
+                                        } else {
+                                            <span style={{ padding: "5px 8px", borderRadius: "5px", background: "#fff0d7", color: "#805315", fontSize: "10px", fontWeight: "800" }}>Not verified</span>
+                                        }}
+                                        {if candidate["available"] == True {
+                                            <span style={{ padding: "5px 8px", borderRadius: "5px", background: "#e0f4e8", color: "#176b45", fontSize: "10px", fontWeight: "800" }}>Marked available</span>
+                                        } else {
+                                            <span style={{ padding: "5px 8px", borderRadius: "5px", background: "#fff0d7", color: "#805315", fontSize: "10px", fontWeight: "800" }}>Not marked available</span>
+                                        }}
+                                    </div>
+                                </div>
+                            }}
+                        </div>
+                    }}
+                    {if demo_mode {
+                        <div style={{ marginTop: "18px", padding: "14px", border: "2px solid #d97706", borderRadius: "10px", background: "#fffbeb" }}>
+                            <div style={{ color: "#92400e", fontSize: "11px", fontWeight: "900", letterSpacing: "0.6px" }}>
+                                SIMULATED DEMO CANDIDATES — NOT REAL DONORS
+                            </div>
+                            <div style={{ marginTop: "8px", color: "#78350f", fontSize: "11px", lineHeight: "1.7" }}>
+                                These names are fictional examples. They are not registered people; their real locations are unknown, and they cannot be contacted or notified. Do not use these results for patient care. Demo candidates are excluded from the live match count.
+                            </div>
+                            <div style={{ marginTop: "12px", color: "#78350f", fontSize: "11px", fontWeight: "800" }}>Simulated examples: {demo_match_count}</div>
+                            {if len(demo_matches) == 0 {
+                                <div style={{ marginTop: "8px", color: "#78350f", fontSize: "11px" }}>No illustrative candidates match this blood group in the demo dataset.</div>
+                            }}
+                            {for (i, candidate) in enumerate(demo_matches) {
+                                <div key={candidate["donor_id"]} style={{ padding: "12px", marginTop: "9px", border: "1px dashed #d97706", borderRadius: "8px", background: "#ffffff" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                                        <div style={{ color: "#78350f", fontSize: "13px", fontWeight: "900" }}>{candidate["name"]}</div>
+                                        <div style={{ padding: "5px 8px", borderRadius: "5px", background: "#fef3c7", color: "#92400e", fontSize: "11px", fontWeight: "900" }}>{candidate["blood_group"]}</div>
+                                    </div>
+                                    <div style={{ marginTop: "6px", color: "#92400e", fontSize: "10px", fontWeight: "800" }}>FICTIONAL EXAMPLE · NOT CONTACTABLE · LOCATION NOT KNOWN</div>
+                                </div>
+                            }}
+                        </div>
+                    }}
+                    <div style={{ marginTop: "14px", padding: "14px", background: "#f3f8fc", border: "1px solid #dce8f1", borderRadius: "10px" }}>
+                      <button
+                          onClick={lambda { explain_results(); }}
+                          style={{ background: "#082f6b", color: "#ffffff", border: "none", borderRadius: "7px", padding: "10px 15px", fontWeight: "700", cursor: "pointer" }}
+                      >
+                          Explain Results with AI
+                      </button>
+                      {if ai_status != "" {
+                          <div style={{ marginTop: "10px", color: "#45627e", fontSize: "12px", lineHeight: "1.6" }}>{ai_status}</div>
+                      }}
+                      {if ai_explanation != "" {
+                          <div style={{ marginTop: "8px", color: "#082f6b", fontSize: "13px", lineHeight: "1.7" }}>{ai_explanation}</div>
+                      }}
+                  </div>
+                  <div
+                      style={{
+                          marginTop: "13px",
                             padding: "11px 13px",
                             background: "#fff8ed",
                             border: "1px solid #f4dfb9",
