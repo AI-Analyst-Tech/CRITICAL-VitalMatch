@@ -51,7 +51,7 @@ def:pub CriticalHeader() -> JsxElement {
                 zIndex: "2"
             }}>
                 <img
-                    src="/assets/critical-logo-header-exact.png"
+                    src="/static/assets/critical-logo-header-exact.png"
                     alt="CRITICAL - Intelligent Blood Donor Mobilization"
                     style={{
                         width: "250px",
@@ -220,7 +220,7 @@ def:pub CriticalHeader() -> JsxElement {
                     flexShrink: "0"
                 }}>
                     <img
-                        src="/assets/critical-profile-photo-centered.png"
+                        src="/static/assets/critical-profile-photo-centered.png"
                         alt="Profile"
                         style={{
                             position: "absolute",

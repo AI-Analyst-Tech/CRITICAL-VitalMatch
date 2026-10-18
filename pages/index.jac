@@ -273,7 +273,7 @@ def:pub Home() -> JsxPage {
                         boxSizing: "border-box"
                     }}>
                         <img
-                            src="/assets/critical-hero-reference.png"
+                            src="/static/assets/critical-hero-reference.png"
                             alt="Blood donor receiving care"
                             style={{
                                 width: "100%",
@@ -782,7 +782,7 @@ def:pub Home() -> JsxPage {
                         justifyContent: "center"
                     }}>
                         <img
-                            src="/assets/critical-main-dashboard.png"
+                            src="/static/assets/critical-main-dashboard.png"
                             alt="CRITICAL mobilization command dashboard"
                             style={{
                                 width: "100%",
@@ -882,7 +882,7 @@ def:pub Home() -> JsxPage {
                             background: "#A80727"
                         }}>
                             <img
-                                src="/assets/critical-donor-cta.png"
+                                src="/static/assets/critical-donor-cta.png"
                                 alt="Become a blood donor"
                                 style={{
                                     width: "auto",
@@ -1076,7 +1076,7 @@ def:pub Home() -> JsxPage {
                     }}>
 
                         <img
-                            src="/assets/critical-logo-header-exact.png"
+                            src="/static/assets/critical-logo-header-exact.png"
                             alt="CRITICAL Intelligent Blood Donor Mobilization"
                             style={{
                                 width: "270px",
