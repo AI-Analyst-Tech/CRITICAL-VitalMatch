@@ -5,7 +5,7 @@ import from ..components.foundation {
     CriticalPageBackground
 }
 
-sv import from ..backend.request_actions {
+import from ..backend.request_actions {
     read_my_donor_profile
 }
 

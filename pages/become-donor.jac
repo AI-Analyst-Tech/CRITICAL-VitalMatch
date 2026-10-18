@@ -5,7 +5,7 @@ import from ..components.foundation {
     CriticalPageBackground
 }
 
-sv import from ..backend.request_actions {
+import from ..backend.request_actions {
     RegisterDonor,
     save_my_donor_profile
 }
@@ -77,7 +77,7 @@ def:pub Page() -> JsxPage {
         submitting = True;
         status_message = "Creating your login account...";
 
-        signup_result: dict | None = None;
+        signup_result: SignupResult | None = None;
         signup_ok: bool = False;
         signup_error: str = "";
         signup_user_id: str = "";
