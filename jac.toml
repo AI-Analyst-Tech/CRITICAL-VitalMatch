@@ -9,6 +9,7 @@ default-app = "critical"
 kind = "web-app"
 entry_point = "main.jac"
 
+jac-version = "==0.37.23"
 [byllm]
 
 [byllm.model]
