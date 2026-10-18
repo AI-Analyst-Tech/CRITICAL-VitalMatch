@@ -60,7 +60,7 @@ def:pub Page() -> JsxPage {
                     <div style={{
                         flex: "0.8",
                         minWidth: "330px",
-                        backgroundImage: "url('/assets/nurse.png')",
+                        backgroundImage: "url('/static/assets/safety-nurse.jpg')",
                         backgroundSize: "cover",
                         backgroundPosition: "center"
                     }}></div>
