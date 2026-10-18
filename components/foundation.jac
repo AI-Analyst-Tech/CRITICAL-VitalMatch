@@ -25,7 +25,7 @@ def:pub CriticalHeader() -> JsxElement {
         zIndex: "100",
         boxShadow: "0 8px 30px rgba(0,0,0,0.35)"
     }}>
-        <div style={{
+        <div className="critical-header-row" style={{
             margin: "0",
             width: "100%",
             minHeight: "88px",
@@ -42,7 +42,7 @@ def:pub CriticalHeader() -> JsxElement {
             overflow: "visible",
             position: "relative"
         }}>
-            <a href="/" style={{
+            <a href="/" className="critical-header-logo" style={{
                 display: "flex",
                 alignItems: "center",
                 flexShrink: "0",
@@ -62,7 +62,7 @@ def:pub CriticalHeader() -> JsxElement {
                 />
             </a>
 
-            <div style={{
+            <div className="critical-desktop-nav" style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",

@@ -23,7 +23,7 @@ def:pub Home() -> JsxPage {
                 boxSizing: "border-box"
             }}>
 
-                <div style={{
+                <div className="critical-home-hero" style={{
                     width: "100%",
                     background: "#0A1728",
                     border: "1px solid #20364D",

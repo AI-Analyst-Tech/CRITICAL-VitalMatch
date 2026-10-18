@@ -1,0 +1,140 @@
+:root {
+  color-scheme: dark;
+  --critical-ink: #07111f;
+  --critical-surface: #0a1728;
+  --critical-surface-raised: #101f33;
+  --critical-border: #243b54;
+  --critical-text: #f5f8ff;
+  --critical-muted: #afc3dc;
+  --critical-red: #ff123b;
+  --critical-blue: #168dff;
+  --critical-green: #42d6a4;
+  font-family: Inter, Arial, sans-serif;
+}
+
+html {
+  min-width: 320px;
+  background: var(--critical-ink);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: radial-gradient(ellipse at 78% 8%, rgba(22, 141, 255, 0.12), transparent 42%), linear-gradient(135deg, #07111f 0%, #0a1728 52%, #07111f 100%);
+  color: var(--critical-text);
+  font-family: Inter, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+img {
+  max-width: 100%;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(22, 141, 255, 0.8);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .critical-header-row {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 6px 12px !important;
+  }
+
+  .critical-header-logo img {
+    width: min(190px, 52vw) !important;
+    height: 54px !important;
+  }
+
+  .critical-desktop-nav {
+    order: 3;
+    flex: 1 0 100% !important;
+    justify-content: flex-start !important;
+    overflow-x: auto;
+    padding-bottom: 3px;
+  }
+
+  .critical-desktop-nav a {
+    flex: 0 0 auto;
+    font-size: 11px !important;
+    padding: 9px 8px !important;
+  }
+
+  .critical-account-nav {
+    margin-left: auto;
+    gap: 6px !important;
+  }
+
+  .critical-account-nav > a {
+    padding: 8px 10px !important;
+    font-size: 11px !important;
+  }
+
+  .critical-account-nav > button[aria-label="Notifications"],
+  .critical-account-nav > a[aria-label="Profile"] {
+    display: none !important;
+  }
+
+  .critical-home-hero {
+    flex-direction: column !important;
+    min-height: 0 !important;
+  }
+
+  .critical-home-hero > div:first-child,
+  .critical-home-hero > div:last-child {
+    width: 100% !important;
+    min-height: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .critical-home-hero > div:first-child {
+    padding: 26px 20px !important;
+  }
+
+  .critical-home-hero h1,
+  .critical-home-hero h2 {
+    font-size: clamp(30px, 8vw, 40px) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.6px !important;
+  }
+
+  .critical-home-hero > div:last-child {
+    height: clamp(220px, 65vw, 340px) !important;
+  }
+
+  .critical-home-hero > div:last-child img {
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
