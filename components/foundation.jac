@@ -140,7 +140,7 @@ def:pub CriticalHeader() -> JsxElement {
                 }}>About</a>
             </div>
 
-            <div style={{
+            <div className="critical-account-nav" style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
