@@ -6,8 +6,6 @@ version = "0.1.0"
 
 description = "CRITICAL - Intelligent Blood Donor Mobilization"
 default-app = "critical"
-kind = "web-app"
-entry_point = "main.jac"
 
 jac-version = "==0.37.23"
 [byllm]
